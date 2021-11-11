@@ -26,4 +26,19 @@ public class ClubService {
             return club.get();
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
+
+    public Club addClub(Club club) {
+        if(isUnique(club.getName()))
+            return repository.save(club);
+        throw new ResponseStatusException(HttpStatus.CONFLICT);
+    }
+
+    private boolean isUnique(String name) {
+        List<Club> clubs = repository.findAll();
+        for (Club club : clubs) {
+            if (club.getName().equals(name))
+                return false;
+        }
+        return true;
+    }
 }
